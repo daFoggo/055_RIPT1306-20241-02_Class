@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
       editButton.classList.add("edit_button");
       deleteButton.classList.add("delete_button");
 
+      // Em lười làm modal xDDDD
       editButton.addEventListener("click", () => {
         handleEditStudent({
           id: student.getData().id,
