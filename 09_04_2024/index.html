@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="">
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>Quản lý sinh viên</h1>
+    </div>
+    <div class="main">
+      <div class="actions">
+        <div class="inputs">
+          <input type="text" id="add_id" placeholder="ID">
+          <input type="text" id="add_name" placeholder="Tên" />
+          <select id="add_gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <input type="text" id="add_dob" placeholder="Ngày sinh">
+          <input type="text" id="add_city" placeholder="Thành phố" />
+        </div>
+        <button id="add_student" class="primary_button">Thêm sinh viên</button>
+      </div>
+      <div id="student_container"></div>
+    </div>
+  </body>
+  <script src="./script.js"></script>
+  <script src="./const.js"></script>
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+</html>
