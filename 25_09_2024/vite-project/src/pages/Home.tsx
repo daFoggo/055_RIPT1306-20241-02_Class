@@ -3,7 +3,7 @@ import Item from "../components/Item";
 import { useState } from "react";
 
 const Home = () => {
-  const [todoData] = useState([
+  const [todoData, setTodoData] = useState([
     {
       title: "Học lập trình web với React",
       date: "Tomorrow",
@@ -30,6 +30,12 @@ const Home = () => {
     },
   ]);
 
+  const toggleItemState = (index: number) => {
+    setTodoData(prevData => prevData.map((item, i) => 
+      i === index ? { ...item, state: !item.state } : item
+    ));
+  };
+
   return (
     <div className="flex flex-col gap-6 min-h-screen bg-base p-4">
       <h1 className="font-bold text-3xl">My work</h1>
@@ -41,6 +47,7 @@ const Home = () => {
             date={item.date}
             color={item.color}
             state={item.state}
+            onToggle={() => toggleItemState(index)}
           />
         ))}
       </div>

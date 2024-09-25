@@ -3,4 +3,5 @@ export interface ItemProps {
     date: string;
     color: string;
     state: boolean;
+    onToggle: () => void;
 }
