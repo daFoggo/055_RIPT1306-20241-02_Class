@@ -1,5 +1,5 @@
 import { CalendarHeart } from "lucide-react";
-import { ItemProps } from "../types/Item";
+import { ItemProps } from "../types/Todo";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "./ui/badge";
 

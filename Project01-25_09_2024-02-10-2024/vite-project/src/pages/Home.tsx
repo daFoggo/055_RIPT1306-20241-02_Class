@@ -1,6 +1,13 @@
-import { CalendarDays, CircleCheckBig, ListTodo, Plus } from "lucide-react";
-import Item from "../components/Item";
 import { useState, useEffect } from "react";
+import {
+  CalendarDays,
+  CircleCheckBig,
+  ListTodo,
+  Plus,
+  Trash,
+} from "lucide-react";
+import Item from "../components/Item";
+import TodoPieChart from "@/components/TodoPieChart";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,8 +27,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { todoList } from "@/sampleData/todoList";
+import { ItemType } from "@/types/Todo";
 
 // framer stagger motion
 const staggerContainer = {
@@ -40,32 +57,7 @@ const itemVariant = {
 };
 
 const Home = () => {
-  const [todoData, setTodoData] = useState([
-    {
-      title: "Học lập trình web với React",
-      date: "Tomorrow",
-      color: "orange",
-      state: true,
-    },
-    {
-      title: "Gửi email nộp bài tập về nhà",
-      date: "Saturday",
-      color: "lavender",
-      state: false,
-    },
-    {
-      title: "Học từ vựng tiếng anh mỗi ngày",
-      date: "Monday",
-      color: "lavender",
-      state: true,
-    },
-    {
-      title: "Viết tiểu luận môn triết học",
-      date: "Today",
-      color: "green",
-      state: false,
-    },
-  ]);
+  const [todoData, setTodoData] = useState<ItemType[]>(todoList);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newTask, setNewTask] = useState({ title: "", date: "" });
@@ -73,26 +65,11 @@ const Home = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
 
-  // filter tasks
-  const filteredTasks = todoData.filter((task) => {
-    const statusMatch =
-      statusFilter === "all"
-        ? true
-        : statusFilter === "completed"
-        ? task.state
-        : !task.state;
-
-    const dateMatch =
-      dateFilter === "all"
-        ? true
-        : dateFilter === "today"
-        ? task.date.toLowerCase() === "today"
-        : dateFilter === "tomorrow"
-        ? task.date.toLowerCase() === "tomorrow"
-        : !["today", "tomorrow"].includes(task.date.toLowerCase());
-
-    return statusMatch && dateMatch;
-  });
+  // show delete button
+  useEffect(() => {
+    const hasCheckedTasks = todoData.some((item) => item.state);
+    setShowDelete(hasCheckedTasks);
+  }, [todoData]);
 
   // checkbox
   const toggleItemState = (index: number) => {
@@ -146,6 +123,27 @@ const Home = () => {
     setShowDelete(false);
   };
 
+  // filter tasks
+  const filteredTasks = todoData.filter((task) => {
+    const statusMatch =
+      statusFilter === "all"
+        ? true
+        : statusFilter === "completed"
+        ? task.state
+        : !task.state;
+
+    const dateMatch =
+      dateFilter === "all"
+        ? true
+        : dateFilter === "today"
+        ? task.date.toLowerCase() === "today"
+        : dateFilter === "tomorrow"
+        ? task.date.toLowerCase() === "tomorrow"
+        : !["today", "tomorrow"].includes(task.date.toLowerCase());
+
+    return statusMatch && dateMatch;
+  });
+
   const renderField = (
     label: string,
     id: string,
@@ -164,12 +162,6 @@ const Home = () => {
     </div>
   );
 
-  // show delete button
-  useEffect(() => {
-    const hasCheckedTasks = todoData.some((item) => item.state);
-    setShowDelete(hasCheckedTasks);
-  }, [todoData]);
-
   return (
     <div className="flex flex-col gap-6 min-h-screen px-4">
       <div className="flex justify-between w-full pb-4 border-b border-gray-border px-4">
@@ -177,47 +169,70 @@ const Home = () => {
           <ListTodo />
           <p>My work</p>
         </div>
+      </div>
+
+      <div className="flex justify-between">
+        <div className="flex gap-4 mb-4 font-semibold">
+          <Select onValueChange={setStatusFilter} defaultValue="all">
+            <SelectTrigger className="w-fit flex items-center gap-2">
+              <CircleCheckBig className="w-4" />
+              <SelectValue placeholder="Lọc theo trạng thái" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Trạng thái</SelectLabel>
+                <SelectItem value="all">Tất cả</SelectItem>
+                <SelectItem value="completed">Đã hoàn thành</SelectItem>
+                <SelectItem value="incomplete">Chưa hoàn thành</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select onValueChange={setDateFilter} defaultValue="all">
+            <SelectTrigger className="w-fit flex items-center gap-2">
+              <CalendarDays className="w-4" />
+              <SelectValue placeholder="Lọc theo thời hạn" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Thời hạn</SelectLabel>
+                <SelectItem value="all">Tất cả</SelectItem>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="tomorrow">Tomorrow</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button className="bg-sand hover:bg-sand text-dirt font-semibold">
+                Thống kê công việc
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="bg-sheet border border-l-gray-border border-y-0 b border-r-0">
+              <SheetHeader className="border-b border-gray-border pb-4">
+                <SheetTitle className="text-white font-bold">
+                  Thống kê công việc
+                </SheetTitle>
+                <SheetDescription className="font-semibold text-sub-text2">
+                  Minh họa dữ liệu công việc của bạn
+                </SheetDescription>
+              </SheetHeader>
+              <TodoPieChart data={todoData} />
+            </SheetContent>
+          </Sheet>
+        </div>
+
         {showDelete && (
           <Button
             onClick={handleDeleteTask}
-            className="w-fit flex items-center gap-1 bg-red-500 hover:bg-red-500/75"
+            className="w-fit flex items-center gap-2 bg-red-500 border-2 border-red-400 hover:bg-red-500/75 font-semibold"
           >
-            Xóa các task đã hoàn thành
+            <Trash className="w-4 h-4" />
+            <span className="hidden sm:inline">Xóa các task đã chọn</span>
           </Button>
         )}
-      </div>
-
-      <div className="flex gap-4 mb-4 font-semibold">
-        <Select onValueChange={setStatusFilter} defaultValue="all">
-          <SelectTrigger className="w-fit flex items-center gap-2">
-            <CircleCheckBig className="w-4" />
-            <SelectValue placeholder="Lọc theo trạng thái" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Trạng thái</SelectLabel>
-              <SelectItem value="all">Tất cả</SelectItem>
-              <SelectItem value="completed">Đã hoàn thành</SelectItem>
-              <SelectItem value="incomplete">Chưa hoàn thành</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <Select onValueChange={setDateFilter} defaultValue="all">
-          <SelectTrigger className="w-fit flex items-center gap-2">
-            <CalendarDays className="w-4" />
-            <SelectValue placeholder="Lọc theo thời hạn" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Thời hạn</SelectLabel>
-              <SelectItem value="all">Tất cả</SelectItem>
-              <SelectItem value="today">Today</SelectItem>
-              <SelectItem value="tomorrow">Tomorrow</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
       </div>
 
       <motion.div
@@ -241,7 +256,7 @@ const Home = () => {
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button className="w-fit bg-white hover:bg-white/90 flex items-center gap-1 text-black">
+          <Button className="w-fit bg-lavender-border text-white hover:bg-lavender-border/90 flex items-center gap-1 border-2 border-lavender font-semibold ">
             <Plus size={24} /> Thêm mới
           </Button>
         </DialogTrigger>
@@ -266,7 +281,12 @@ const Home = () => {
             )}
           </div>
 
-          <Button onClick={handleAddTask}>Xác nhận</Button>
+          <Button
+            onClick={handleAddTask}
+            className="bg-lavender-border border-2 border-lavender hover:bg-lavender-border/90 font-semibold"
+          >
+            Xác nhận
+          </Button>
         </DialogContent>
       </Dialog>
     </div>
