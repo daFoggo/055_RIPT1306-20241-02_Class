@@ -236,7 +236,7 @@ const Home = () => {
       </div>
 
       <motion.div
-        className="flex flex-col gap-4" 
+        className="flex flex-col gap-4"
         variants={staggerContainer}
         initial="hidden"
         animate="show"
