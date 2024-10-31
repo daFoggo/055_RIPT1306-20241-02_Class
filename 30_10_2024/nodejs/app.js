@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const { sequelize, connectDB } = require("./config/db");
-const todoRoutes = require("./routes/Todo/todo");
+const taskRoutes = require("./routes/task");
+const userRoutes = require("./routes/user");
 
 // load .env
 dotenv.config();
@@ -17,7 +18,8 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.use("/api/todo", todoRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 3000;
 

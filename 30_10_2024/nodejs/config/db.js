@@ -12,12 +12,13 @@ const sequelize = new Sequelize(
   {
     host: process.env.HOST,
     dialect: "mysql",
-  }
+  },
 );
 
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
+    await sequelize.sync({ alter: true });
     console.log("Connection databases successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
