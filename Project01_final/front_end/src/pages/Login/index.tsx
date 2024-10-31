@@ -39,13 +39,14 @@ const Login = () => {
     try {
       const res = await axios.post(`${authIp}/login`, values);
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.data));
       navigate("/dashboard");
     } catch (error) {
       console.error(error);
       toast.error("Login failed. Please check your information");
-      form.setError("root", { 
-        type: "manual", 
-        message: "Login failed. Please check your information" 
+      form.setError("root", {
+        type: "manual",
+        message: "Login failed. Please check your information",
       });
     }
   };
@@ -69,10 +70,7 @@ const Login = () => {
                   <FormItem>
                     <FormLabel>Username or Email</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter username or email" 
-                        {...field} 
-                      />
+                      <Input placeholder="Enter username or email" {...field} />
                     </FormControl>
                     <FormDescription>
                       Enter your username or email address

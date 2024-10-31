@@ -29,7 +29,7 @@ const RootLayout = () => {
       <div className="flex min-h-screen min-w-full">
         <RootSidebar />
         <div className="flex flex-col flex-grow">
-          <main className="flex-grow p-6">
+          <main className="flex-grow">
             <Outlet />
             <Toaster
               toastOptions={{

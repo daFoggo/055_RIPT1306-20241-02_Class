@@ -1,7 +1,7 @@
 const { Op } = require("sequelize");
-const { User } = require("../models/user");
-const { TaskPriority } = require("../models/taskPriority");
-const { TaskStatus } = require("../models/taskStatus");
+const  User  = require("../models/user");
+const  TaskPriority  = require("../models/taskPriority");
+const  TaskStatus  = require("../models/taskStatus");
 
 // Validate required fields
 const validateRequiredFields = (data) => {

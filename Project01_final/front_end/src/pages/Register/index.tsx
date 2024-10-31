@@ -51,6 +51,7 @@ const Register = () => {
       const { confirmPassword, ...submitData } = values;
       const res = await axios.post(`${authIp}/register`, submitData);
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.data));
       navigate("/dashboard");
 
     } catch (error) {

@@ -1,45 +1,25 @@
-const { DataTypes } = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db.js");
+const TaskPriority = require("./taskPriority");
+const TaskStatus = require("./taskStatus");
+const User = require("./user");
 
-const {User} = require("./user");
-const {TaskPriority} = require("./taskPriority");
-const {TaskStatus} = require("./taskStatus");
+class Task extends Model {}
 
-
-const Task = sequelize.define(
-  "Task",
+Task.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    title: {
-      type: DataTypes.STRING(200),
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
+    title: DataTypes.STRING,
+    description: DataTypes.TEXT,
+    dueDate: DataTypes.DATE,
     priorityId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      field: "priorityId",
       references: {
         model: TaskPriority,
         key: "id",
       },
     },
-    dueDate: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      field: "dueDate",
-    },
     statusId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      field: "statusId",
       references: {
         model: TaskStatus,
         key: "id",
@@ -47,8 +27,6 @@ const Task = sequelize.define(
     },
     assignorId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      field: "assignorId",
       references: {
         model: User,
         key: "id",
@@ -56,32 +34,25 @@ const Task = sequelize.define(
     },
     assigneeId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      field: "assigneeId",
       references: {
         model: User,
         key: "id",
       },
     },
   },
-  {
-    timestamps: true,
-    createdAt: "createdAt",
-    updatedAt: "updatedAt",
-  }
+  { sequelize, modelName: "task" }
 );
 
-module.exports = {Task};
+TaskPriority.hasMany(Task, { foreignKey: "priorityId" });
+Task.belongsTo(TaskPriority, { foreignKey: "priorityId" });
 
-// constraints
-module.exports.associateTask = (models) => {
-  const { User, TaskPriority, TaskStatus } = models;
+TaskStatus.hasMany(Task, { foreignKey: "statusId" });
+Task.belongsTo(TaskStatus, { foreignKey: "statusId" });
 
-  Task.belongsTo(TaskPriority, { foreignKey: "priorityId" });
-  Task.belongsTo(TaskStatus, { foreignKey: "statusId" });
-  Task.belongsTo(User, { as: "assignor", foreignKey: "assignorId" });
-  Task.belongsTo(User, { as: "assignee", foreignKey: "assigneeId" });
+User.hasMany(Task, { as: "assignedTasks", foreignKey: "assigneeId" });
+User.hasMany(Task, { as: "createdTasks", foreignKey: "assignorId" });
 
-  User.hasMany(Task, { as: "assignedTasks", foreignKey: "assigneeId" });
-  User.hasMany(Task, { as: "createdTasks", foreignKey: "assignorId" });
-};
+Task.belongsTo(User, { as: "assignor", foreignKey: "assignorId" });
+Task.belongsTo(User, { as: "assignee", foreignKey: "assigneeId" });
+
+module.exports = Task;

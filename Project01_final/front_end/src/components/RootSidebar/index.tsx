@@ -1,11 +1,4 @@
-import {
-  ChevronUp,
-  ListTodo,
-  LogOut,
-  Sparkles,
-  User2,
-  UserPen,
-} from "lucide-react";
+import { ChevronUp, ListTodo, LogOut, User2, UserPen } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -29,9 +22,24 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const RootSidebar = () => {
+  const [user, setUser] = useState({
+    id: "",
+    username: "",
+    email: "",
+    fullName: "",
+  });
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -83,7 +91,7 @@ const RootSidebar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <User2 /> {user.username}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
