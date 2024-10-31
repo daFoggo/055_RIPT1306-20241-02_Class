@@ -1,13 +1,12 @@
 const { Task } = require("../models/task");
 const { User } = require("../models/user");
+const { Op } = require("sequelize");
 
 const {
   validateRegisterInput,
   hashPassword,
   comparePassword,
   generateToken,
-  buildUserQueryConditions,
-  getPagination,
 } = require("../helper/user");
 
 const userController = {
@@ -125,6 +124,7 @@ const userController = {
       });
     }
   },
+
 
   // Get user profile info
   getProfile: async (req, res) => {

@@ -24,4 +24,4 @@ const TaskStatus = sequelize.define(
   }
 );
 
-module.exports = TaskStatus;
+module.exports = {TaskStatus};

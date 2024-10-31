@@ -20,4 +20,4 @@ const TaskPriority = sequelize.define("TaskPriority", {
     tableName: 'task_priorities'
   });
 
-module.exports = TaskPriority;
+module.exports = {TaskPriority};

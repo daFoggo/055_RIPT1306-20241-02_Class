@@ -1,6 +1,6 @@
+require('dotenv').config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Op } = require("sequelize");
 
 // Validate user input for registration
 const validateRegisterInput = (data) => {
@@ -23,10 +23,10 @@ const validateRegisterInput = (data) => {
   }
 
   // Validate password strength
-  if (password.length < 6) {
+  if (password.length < 3) {
     return {
       isValid: false,
-      message: "Mật khẩu phải có ít nhất 6 ký tự",
+      message: "Mật khẩu phải có ít nhất 3 ký tự",
     };
   }
 
@@ -46,7 +46,13 @@ const comparePassword = async (password, hashedPassword) => {
 
 // Gen JWT
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "24h" });
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined');
+  }
+  
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { 
+    expiresIn: "24h" 
+  });
 };
 
 
@@ -64,6 +70,5 @@ module.exports = {
   hashPassword,
   comparePassword,
   generateToken,
-  buildUserQueryConditions,
   getPagination,
 };

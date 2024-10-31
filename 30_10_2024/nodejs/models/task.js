@@ -1,9 +1,9 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db.js");
 
-const User = require("./user");
-const TaskPriority = require("./taskPriority");
-const TaskStatus = require("./taskStatus");
+const {User} = require("./user");
+const {TaskPriority} = require("./taskPriority");
+const {TaskStatus} = require("./taskStatus");
 
 
 const Task = sequelize.define(
@@ -71,7 +71,7 @@ const Task = sequelize.define(
   }
 );
 
-module.exports = Task;
+module.exports = {Task};
 
 // constraints
 module.exports.associateTask = (models) => {

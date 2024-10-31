@@ -4,9 +4,18 @@ const router = express.Router();
 const { userController } = require("../controllers/user");
 const auth = require("../middleware/auth");
 
+// special route for verifying token
+router.get("/verify-token", auth, (req, res) => {
+  // middleware check if there is token
+  res.json({
+    valid: true,
+    user: req.user,
+  });
+});
+
 // user routes for public
-router.post("/register", userController.register);
-router.post("/login", userController.login);
+router.post("/auth/register", userController.register);
+router.post("/auth/login", userController.login);
 
 // user routes for authenticated
 router.get("/profile", auth, userController.getProfile);

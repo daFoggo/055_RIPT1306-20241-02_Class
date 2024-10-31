@@ -31,11 +31,6 @@ const User = sequelize.define(
       allowNull: true,
     },
   },
-  {
-    timestamps: true,
-    createdAt: "createdAt",
-    updatedAt: "updatedAt",
-  }
 );
 
-module.exports = User;
+module.exports = {User};
