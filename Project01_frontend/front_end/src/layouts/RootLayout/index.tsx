@@ -24,12 +24,10 @@ const RootLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="relative flex flex-col md:flex-row min-h-screen w-full">
-        <div className="fixed md:relative w-full md:w-64 lg:w-72 z-50">
-          <RootSidebar />
-        </div>
-        <main className="flex-grow overflow-x-hidden">
-          <div className="max-w-7xl">
+      <div className="flex flex-col md:flex-row min-h-screen w-full">
+        <RootSidebar />
+        <main className="flex-grow w-full p-6">
+          <div className="w-full">
             <Outlet />
           </div>
           <Toaster

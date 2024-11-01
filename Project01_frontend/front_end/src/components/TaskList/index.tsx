@@ -3,7 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CreateTask from "../CreateTask/";
 import TaskCard from "../TaskCard";
+
 import { ITask, ITaskListProps } from "@/models/TaskList/type";
+import { formatDisplayDate, getDateWithoutTime } from "@/utils/Helper/TaskList";
 
 const TaskList = ({
   taskPriorities,
@@ -32,19 +34,25 @@ const TaskList = ({
     );
   };
 
+
   const groupTasksByDueDate = (tasks: ITask[]) => {
     const grouped = tasks.reduce((acc, task) => {
-      const date = new Date(task.dueDate).toLocaleDateString();
-      if (!acc[date]) {
-        acc[date] = [];
+      const dateObj = getDateWithoutTime(task.dueDate);
+      if (!dateObj) {
+        return acc;
       }
-      acc[date].push(task);
+
+      const dateKey = dateObj.toISOString().split('T')[0]; 
+      
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(task);
       return acc;
     }, {} as Record<string, ITask[]>);
 
     return Object.entries(grouped).sort(
-      ([dateA], [dateB]) =>
-        new Date(dateA).getTime() - new Date(dateB).getTime()
+      ([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime()
     );
   };
 
@@ -57,14 +65,14 @@ const TaskList = ({
   }
 
   return (
-    <div className="w-full max-w-[100vw] px-2 sm:px-4">
+    <div className="w-full max-w-[100vw]">
       <Tabs defaultValue={taskStatuses[0]?.name} className="w-full">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
           <TabsList className="h-auto flex-wrap">
             <div className="flex flex-wrap gap-2">
               {taskStatuses.map((status) => (
-                <TabsTrigger 
-                  key={status.id} 
+                <TabsTrigger
+                  key={status.id}
                   value={status.name}
                   className="px-3 py-1.5 text-sm"
                 >
@@ -85,8 +93,8 @@ const TaskList = ({
         </div>
 
         {taskStatuses.map((status) => (
-          <TabsContent 
-            key={status.id} 
+          <TabsContent
+            key={status.id}
             value={status.name}
             className="mt-4 sm:mt-6"
           >
@@ -97,13 +105,7 @@ const TaskList = ({
                 ).map(([date, dateTasks]) => (
                   <div key={date} className="space-y-3">
                     <h2 className="text-lg sm:text-xl font-semibold text-primary px-2">
-                      Due to{" "}
-                      {new Date(date).toLocaleDateString("en-US", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
+                      Due to {formatDisplayDate(date)}
                     </h2>
                     <div className="grid gap-3 sm:gap-4">
                       {dateTasks.map((task) => (

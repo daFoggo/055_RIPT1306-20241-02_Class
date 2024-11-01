@@ -5,7 +5,13 @@ import { z } from "zod";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -53,7 +59,6 @@ const Register = () => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.data));
       navigate("/dashboard");
-
     } catch (error) {
       console.error(error);
     }
@@ -154,6 +159,17 @@ const Register = () => {
               </Button>
             </form>
           </Form>
+          <CardFooter className="flex items-center p-0">
+            Already have an account?{" "}
+            <Button
+              onClick={() => {
+                navigate("/auth/login");
+              }}
+              variant="link"
+            >
+              Login
+            </Button>
+          </CardFooter>
         </CardContent>
       </Card>
     </div>

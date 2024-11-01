@@ -1,15 +1,7 @@
-# 1. About
-- This is a simple base that is built for React and Shadcn usage. Also include Framer motion for additional animation
+# 1. Demovideo 
+<video controls src="projec01demo.mp4" title="Title"></video>
 
-# 2. Libraries 
-- React
-- Shadcn
-- Framer motion
-- React Router
-- Axios
-
-# 3. Project structrue
-
+# 2. Project structrue
 ```
 └── 📁My_basic_React_Shadcn_base
     └── 📁public
