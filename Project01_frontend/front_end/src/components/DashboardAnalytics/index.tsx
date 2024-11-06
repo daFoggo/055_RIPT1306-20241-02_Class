@@ -1,3 +1,4 @@
+"use client";
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -18,14 +19,21 @@ const DashboardAnalytics = ({ tasks, users }: IDashboardAnalyticsProps) => {
   const analytics = useMemo(() => {
     const totalTasks = tasks.length;
 
-    // Task based on status
+    // task stats based on status
     const newTasks = tasks.filter((task) => task.TaskStatus.id === 1).length;
-    const inProgressTasks = tasks.filter((task) => task.TaskStatus.id === 2).length;
-    const cancelledTasks = tasks.filter((task) => task.TaskStatus.id === 3).length;
+    const inProgressTasks = tasks.filter(
+      (task) => task.TaskStatus.id === 2
+    ).length;
+    const cancelledTasks = tasks.filter(
+      (task) => task.TaskStatus.id === 3
+    ).length;
     const holdTasks = tasks.filter((task) => task.TaskStatus.id === 4).length;
 
     // completion rate
-    const completionRate = (((inProgressTasks + holdTasks) / totalTasks) * 100).toFixed(1);
+    const completionRate = (
+      ((inProgressTasks + holdTasks) / totalTasks) *
+      100
+    ).toFixed(1);
 
     // upcoming deadlines on the next 3 days
     const today = new Date();
@@ -38,11 +46,12 @@ const DashboardAnalytics = ({ tasks, users }: IDashboardAnalyticsProps) => {
     }).length;
 
     // tasks distributed by priority
-    const priorityData = tasks.reduce((acc: any, task) => {
+    const caculatePriorityData = (acc: any, task: any) => {
       const priority = task.TaskPriority.name;
       acc[priority] = (acc[priority] || 0) + 1;
       return acc;
-    }, {});
+    };
+    const priorityData = tasks.reduce(caculatePriorityData, {});
 
     const chartData = Object.entries(priorityData).map(([name, value]) => ({
       name,
@@ -50,11 +59,13 @@ const DashboardAnalytics = ({ tasks, users }: IDashboardAnalyticsProps) => {
     }));
 
     // tasks distributed by assignee
-    const assigneeDistribution = tasks.reduce((acc: any, task) => {
+    const caculateAssigneeData = (acc: any, task: any) => {
       const assigneeName = task.assignee.username;
       acc[assigneeName] = (acc[assigneeName] || 0) + 1;
       return acc;
-    }, {});
+    };
+
+    const assigneeDistribution = tasks.reduce(caculateAssigneeData, {});
 
     return {
       totalTasks,
@@ -71,7 +82,7 @@ const DashboardAnalytics = ({ tasks, users }: IDashboardAnalyticsProps) => {
 
   return (
     <div className="space-y-4 w-full">
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="flex overflow-x-auto sm:grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatisticBlock
           title="Tasks count"
           icon={<ClipboardList className="h-4 w-4 text-muted-foreground" />}
@@ -110,7 +121,7 @@ const DashboardAnalytics = ({ tasks, users }: IDashboardAnalyticsProps) => {
         <CardContent className="p-2 sm:p-6">
           <div className="h-[200px] sm:h-[250px] lg:h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart 
+              <BarChart
                 data={analytics.chartData}
                 margin={{
                   top: 5,
@@ -119,16 +130,13 @@ const DashboardAnalytics = ({ tasks, users }: IDashboardAnalyticsProps) => {
                   bottom: 5,
                 }}
               >
-                <XAxis 
+                <XAxis
                   dataKey="name"
                   tick={{ fontSize: 12 }}
                   interval={0}
                   tickMargin={8}
                 />
-                <YAxis 
-                  tick={{ fontSize: 12 }}
-                  width={30}
-                />
+                <YAxis tick={{ fontSize: 12 }} width={30} />
                 <Tooltip
                   content={
                     <ChartTooltip

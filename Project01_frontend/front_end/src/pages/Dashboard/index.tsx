@@ -47,6 +47,7 @@ const Dashboard = () => {
     <div className="flex flex-col min-h-screen">
       <div className="space-y-2 py-3 px-4 sm:p-0 sm:py-4">
         <ReuseBreadcrumb
+          origin={{ name: "Main", link: "/dashboard" }}
           pageList={[{ name: "Dashboard", link: "/dashboard" }]}
         />
         <h1 className="font-semibold text-lg sm:text-xl">Dashboard</h1>

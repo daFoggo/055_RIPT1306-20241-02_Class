@@ -1,3 +1,5 @@
+import { ITask } from "@/models/TaskList/type";
+
 export const formatDisplayDate = (dateString: string) => {
   try {
     const localDate = getDateWithoutTime(dateString);
@@ -32,4 +34,25 @@ export const getDateWithoutTime = (dateString: string) => {
     console.error("Error parsing date:", dateString, error);
     return null;
   }
+};
+
+export const groupTasksByDueDate = (tasks: ITask[]) => {
+  const grouped = tasks.reduce((acc, task) => {
+    const dateObj = getDateWithoutTime(task.dueDate);
+    if (!dateObj) {
+      return acc;
+    }
+
+    const dateKey = dateObj.toISOString().split("T")[0];
+
+    if (!acc[dateKey]) {
+      acc[dateKey] = [];
+    }
+    acc[dateKey].push(task);
+    return acc;
+  }, {} as Record<string, ITask[]>);
+
+  return Object.entries(grouped).sort(
+    ([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime()
+  );
 };

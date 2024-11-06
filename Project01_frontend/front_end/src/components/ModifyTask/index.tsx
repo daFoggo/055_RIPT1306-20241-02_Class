@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -88,6 +89,7 @@ const ModifyTask = ({
     },
   });
 
+  // CRUD handlers
   const handleUpdate = async (values: any) => {
     setIsLoading(true);
     try {

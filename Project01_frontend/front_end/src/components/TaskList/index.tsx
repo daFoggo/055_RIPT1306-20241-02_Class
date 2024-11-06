@@ -5,7 +5,7 @@ import CreateTask from "../CreateTask/";
 import TaskCard from "../TaskCard";
 
 import { ITask, ITaskListProps } from "@/models/TaskList/type";
-import { formatDisplayDate, getDateWithoutTime } from "@/utils/Helper/TaskList";
+import { formatDisplayDate, groupTasksByDueDate } from "@/utils/Helper/TaskList";
 
 const TaskList = ({
   taskPriorities,
@@ -16,6 +16,8 @@ const TaskList = ({
   loading,
   fetchAllData,
 }: ITaskListProps) => {
+  
+  // Update UI after CRUD
   const handleTaskCreated = (newTask: ITask) => {
     setTasks((prevTasks) => [...prevTasks, newTask]);
     fetchAllData();
@@ -31,28 +33,6 @@ const TaskList = ({
   const handleTaskDeleted = (taskId: string) => {
     setTasks((prevTasks) =>
       prevTasks.filter((task) => task.id !== parseInt(taskId))
-    );
-  };
-
-
-  const groupTasksByDueDate = (tasks: ITask[]) => {
-    const grouped = tasks.reduce((acc, task) => {
-      const dateObj = getDateWithoutTime(task.dueDate);
-      if (!dateObj) {
-        return acc;
-      }
-
-      const dateKey = dateObj.toISOString().split('T')[0]; 
-      
-      if (!acc[dateKey]) {
-        acc[dateKey] = [];
-      }
-      acc[dateKey].push(task);
-      return acc;
-    }, {} as Record<string, ITask[]>);
-
-    return Object.entries(grouped).sort(
-      ([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime()
     );
   };
 

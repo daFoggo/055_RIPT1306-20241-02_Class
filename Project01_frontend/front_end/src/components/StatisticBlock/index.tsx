@@ -1,9 +1,10 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IStatisticBlockProps } from "@/models/StatisticBlock/type";
 
 const StatisticBlock = ({ title, icon, displayData, description } : IStatisticBlockProps) => {
   return (
-    <Card className="shadow-sm rounded-lg">
+    <Card className="flex-none sm:w-full shadow-sm rounded-lg">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-semibold">{title}</CardTitle>
         {icon}

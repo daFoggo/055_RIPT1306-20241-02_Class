@@ -1,4 +1,5 @@
 export interface IReuseBreadcrumb {
+  origin: Page;
   pageList: Page[];
 }
 

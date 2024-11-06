@@ -1,3 +1,4 @@
+"use client";
 import { ChevronUp, ListTodo, LogOut, User2, UserPen } from "lucide-react";
 import {
   Sidebar,

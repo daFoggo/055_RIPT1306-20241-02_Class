@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import RootSidebar from "@/components/RootSidebar";
 import { isTokenValid } from "@/utils/Helper/common";
+import MobileRootNavbar from "@/components/MobileRootNavBar";
 
 const RootLayout = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const RootLayout = () => {
   return (
     <SidebarProvider>
       <div className="flex flex-col md:flex-row min-h-screen w-full">
+        <MobileRootNavbar />
         <RootSidebar />
         <main className="flex-grow w-full p-6">
           <div className="w-full">
@@ -40,7 +42,6 @@ const RootLayout = () => {
             position="top-center"
           />
         </main>
-
         <footer className="mt-auto py-4 px-6 border-t bg-background z-10"></footer>
       </div>
     </SidebarProvider>

@@ -1,6 +1,3 @@
-# 1. Demovideo 
-<video controls src="projec01demo.mp4" title="Title"></video>
-
 # 2. Project structrue
 ```
 └── 📁My_basic_React_Shadcn_base

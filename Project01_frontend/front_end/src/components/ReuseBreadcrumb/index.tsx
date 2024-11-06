@@ -7,12 +7,12 @@ import {
 } from "@/components/ui/breadcrumb";
 import { IReuseBreadcrumb } from "@/models/ReuseBreadcrumb/type";
 
-const ReuseBreadcrumb = ({ pageList }: IReuseBreadcrumb) => {
+const ReuseBreadcrumb = ({origin, pageList }: IReuseBreadcrumb) => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem key="Home">
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          <BreadcrumbLink href={origin.link}>{origin.name}</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         {pageList.map((page, index) => (
