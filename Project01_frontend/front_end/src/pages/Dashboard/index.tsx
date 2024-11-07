@@ -30,7 +30,6 @@ const Dashboard = () => {
           axiosAuth.get(`${taskIp}/get-all-task`),
           axiosAuth.get(`${userIp}/get-all-users`),
         ]);
-      toast.success("Loaded tasks data successfully");
       setTaskStatuses(statusesRes.data.data);
       setTaskPriorities(prioritiesRes.data.data);
       setTasks(tasksRes.data.data.tasks);

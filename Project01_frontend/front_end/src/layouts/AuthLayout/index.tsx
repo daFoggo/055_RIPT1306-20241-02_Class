@@ -25,9 +25,6 @@ const AuthLayout = () => {
         <Outlet />
         <Toaster
           toastOptions={{
-            style: {
-              color: "#752ceb",
-            },
           }}
           position="top-center"
         />

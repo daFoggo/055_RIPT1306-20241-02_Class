@@ -33,12 +33,6 @@ const RootLayout = () => {
             <Outlet />
           </div>
           <Toaster
-            toastOptions={{
-              style: {
-                color: "#752ceb",
-              },
-              className: "z-[1000]",
-            }}
             position="top-center"
           />
         </main>

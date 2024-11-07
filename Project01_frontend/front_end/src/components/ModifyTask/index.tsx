@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import {
   CalendarIcon,
+  CircleCheckBig,
   EllipsisVertical,
   Pencil,
   SquareArrowOutUpRight,
@@ -113,6 +114,27 @@ const ModifyTask = ({
     }
   };
 
+  const handleMarkComplete = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axiosAuth.put(`${taskIp}/update-task/${task.id}`, {
+        ...task,
+        statusId: 5,
+      });
+
+      if (response.data.success) {
+        toast.success("Task marked as completed successfully");
+        onTaskUpdated(response.data.data);
+        setIsUpdateOpen(false);
+      }
+    } catch (error) {
+      toast.error("Failed to update task");
+      console.error("Error updating task:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleDelete = async () => {
     setIsLoading(true);
     try {
@@ -145,6 +167,12 @@ const ModifyTask = ({
           ></Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => handleMarkComplete()}>
+            <CircleCheckBig className="mr-2 h-4 w-4 text-emerald-500 hover:text-emerald-600" />
+            <p className=" text-emerald-500 hover:text-emerald-600">
+              Mark as complete
+            </p>
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setIsViewOpen(true)}>
             <SquareArrowOutUpRight className="mr-2 h-4 w-4" />
             View details
@@ -153,19 +181,19 @@ const ModifyTask = ({
             <Pencil className="mr-2 h-4 w-4" />
             Modify
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setIsDeleteOpen(true)}
-            className="text-destructive"
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete
+          <DropdownMenuItem onClick={() => setIsDeleteOpen(true)}>
+            <Trash2 className="mr-2 h-4 w-4 text-red-500 hover:text-red-600" />
+            <p className=" text-red-500 hover:text-red-600">Delete</p>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       {/* View dialog */}
       <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
-        <DialogContent className="h-[95%] w-[95%] rounded-lg overflow-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent
+          className="h-[95%] w-[95%] rounded-lg overflow-auto"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle>Task detail</DialogTitle>
             <DialogDescription>
@@ -334,7 +362,10 @@ const ModifyTask = ({
 
       {/* Update dialog */}
       <Dialog open={isUpdateOpen} onOpenChange={setIsUpdateOpen}>
-        <DialogContent className="h-[95%] w-[95%] sm:w-auto rounded-lg" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent
+          className="h-[95%] w-[95%] sm:w-auto rounded-lg"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle>Update Task</DialogTitle>
             <DialogDescription>
@@ -518,7 +549,10 @@ const ModifyTask = ({
 
       {/* Delete dialog */}
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DialogContent className="w-[95%] sm:w-auto rounded-lg" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent
+          className="w-[95%] sm:w-auto rounded-lg"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle>Delete Task</DialogTitle>
             <DialogDescription>
